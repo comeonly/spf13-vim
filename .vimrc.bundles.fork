@@ -1,0 +1,38 @@
+if !exists("g:spf13_leader")
+    let g:spf13_leader = '\'
+endif
+let g:spf13_no_autochdir = 1
+let g:spf13_no_fastTabs = 1
+let g:spf13_no_keyfixes = 1
+let g:spf13_no_views = 1
+let php_noindent_switch=1
+
+if !exists('g:spf13_bundle_groups')
+    let g:spf13_bundle_groups=['neocomplcache', 'programming', 'php', 'javascript', 'html', 'misc']
+endif
+
+Bundle 'scrooloose/nerdtree'
+Bundle 'altercation/vim-colors-solarized'
+" Bundle 'spf13/vim-colors'
+Bundle 'tpope/vim-surround'
+Bundle 'spf13/vim-autoclose'
+Bundle 'kien/ctrlp.vim'
+" Bundle 'vim-scripts/sessionman.vim'
+Bundle 'matchit.zip'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'godlygeek/csapprox'
+Bundle 'jistr/vim-nerdtree-tabs'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'mbbill/undotree'
+" Bundle 'myusuf3/numbers.vim'
+Bundle 'nathanaelkane/vim-indent-guides'
+Bundle 'Buffergator'
+if !exists('g:spf13_no_views')
+    Bundle 'vim-scripts/restore_view.vim'
+endif
+Bundle 'tpope/vim-abolish.git'
+
+Bundle 'tpope/vim-unimpaired'
+
+Bundle 'comeonly/php.vim-html-enhanced'
