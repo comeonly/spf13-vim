@@ -1,17 +1,9 @@
-let g:DisableAutoPHPFolding = 1
+" ===== Bundles settings =====
+" NERDTree
+unmap <C-e>
+unmap <leader>nt
+map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
 
-" NERDTree {
-    unmap <C-e>
-    unmap <leader>nt
-    map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
-" }
-
-set background=dark
-set clipboard&
-set nofoldenable
-nmap <leader>b :BuffergatorOpen<CR>
-nmap <silent> <leader>tt :set ts=2 sw=2 et<CR>
-nmap <silent> <leader>tf :set ts=4 sw=4 et<CR>
 " Powerline
 let g:Powerline_symbols = 'fancy'
 
@@ -28,19 +20,6 @@ if exists(":Tabularize")
     vmap <Leader>aa :Tabularize /=><CR>
 endif
 
-set guioptions-=l           " remove the sidebar
-set guioptions-=L           " remove the sidebar
-set guioptions-=r           " remove the sidebar
-set guioptions-=R           " remove the sidebar
-
-" set guifont=Andale\ Mono\ for\ Powerline\ Regular:h16,Menlo\ Regular:h15,Consolas\ Regular:h16,Courier\ New\ Regular:h18
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h16,Andale\ Mono\ Regular:h16,Menlo\ Regular:h15,Consolas\ Regular:h16,Courier\ New\ Regular:h18
-
-nmap <Leader>tb :TagbarOpenAutoClose<CR>
-
-unmap <Esc>[F
-unmap <Esc>[H
-
 " NERDCommenter mappings
 if has("gui_macvim") && has("gui_running")
   map <D-/> <Plug>NERDCommenterToggle<CR>
@@ -49,6 +28,37 @@ else
   map <leader>c<Space> <Plug>NERDCommenterToggle<CR>
 endif
 
+" Vdebug
+let g:vdebug_keymap = {
+\   'run':'<F1>',
+\   'run_to_cursor':'<F11>',
+\   'step_over':'<F9>',
+\   'step_into':'<F8>',
+\   'step_out':'<F7>',
+\   'close':'<F10>',
+\   'detach':'<F2>',
+\   'set_breakpoint':'<F6>',
+\   'get_context':'<F3>',
+\   'eval_under_cursor':'<F12>',
+\}
+" ======= General =========
+set ts=4 sw=4 et
+set listchars=tab:▸.,trail:.,extends:>,precedes:<
+set background=dark
+let g:hybrid_use_Xresources = 1
+colorscheme hybrid
+" set clipboard&
+set nofoldenable
+set nospell
+set guifont=Source\ Code\ Pro\ for\ Powerline:h16,DejaVu\ Sans\ Mono\ for\ Powerline:h16,Andale\ Mono\ Regular:h16,Menlo\ Regular:h15,Consolas\ Regular:h16,Courier\ New\ Regular:h18
+nmap <silent> <leader>tt :set ts=2 sw=2 et<CR>
+nmap <silent> <leader>tf :set ts=4 sw=4 et<CR>
+nmap <leader>b :BuffergatorOpen<CR>
+nmap <Leader>rt :TagbarOpenAutoClose<CR>
+
+unmap <Esc>[F
+unmap <Esc>[H
+
 " Map the arrow keys to be based on display lines, not physical lines
 map <Down> gj
 map <Up> gk
@@ -56,119 +66,106 @@ map <Up> gk
 " Underline the current line with '='
 nmap <silent> <leader>ul :t.<CR>Vr=
 
-if has("gui_macvim") && has("gui_running")
-  " Map command-[ and command-] to indenting or outdenting
-  " while keeping the original selection in visual mode
-  vmap <D-]> >gv
-  vmap <D-[> <gv
+" ヴィジュアルモードで選択したテキストをnで検索する(レジスタv使用)
+vnoremap <silent> n "vy/\V<C-r>=substitute(escape(@v,'\/'),"\n",'\\n','g')<CR><CR>
 
-  nmap <D-]> >>
-  nmap <D-[> <<
+" 括弧補完
+inoremap { {}<LEFT>
+inoremap [ []<LEFT>
+inoremap ( ()<LEFT>
+inoremap " ""<LEFT>
+" ===== for spf13-vim =======
+let g:DisableAutoPHPFolding = 1
 
-  omap <D-]> >>
-  omap <D-[> <<
+" ===== for PHP ======
+" replace
+" For function argument with comment header
+nnoremap <leader>ra viwy?^[\ta-z ]*\<function\><CR>/{<CR>%v%V[/:s/\V<C-r>"//gc<left><left><left>
+" For variable in function
+nnoremap <leader>rf viwy?^[\ta-z ]*\<function\><CR>/{<CR>%v%V:s/\V<C-r>"//gc<left><left><left>
+" For local replace
+nnoremap <leader>rl gd[{V%:s/<C-R>///gc<left><left><left>
+" For global replace
+nnoremap <leader>rg gD:%s/<C-R>///gc<left><left><left>
 
-  imap <D-]> <Esc>>>i
-  imap <D-[> <Esc><<i
+" :makeでPHP構文チェック
+au FileType php setlocal makeprg=php\ -l\ %
+au FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
 
-  " Bubble single lines
-  nmap <D-Up> [e
-  nmap <D-Down> ]e
-  nmap <D-k> [e
-  nmap <D-j> ]e
+" PHPの関数やクラスの折りたたみ(非常に重い）
+let php_folding = 0
 
-  " Bubble multiple lines
-  vmap <D-Up> [egv
-  vmap <D-Down> ]egv
-  vmap <D-k> [egv
-  vmap <D-j> ]egv
+" 文字列の中のSQLをハイライト
+let php_sql_query = 1
 
-  " Map Command-# to switch tabs
-  map  <D-0> 0gt
-  imap <D-0> <Esc>0gt
-  map  <D-1> 1gt
-  imap <D-1> <Esc>1gt
-  map  <D-2> 2gt
-  imap <D-2> <Esc>2gt
-  map  <D-3> 3gt
-  imap <D-3> <Esc>3gt
-  map  <D-4> 4gt
-  imap <D-4> <Esc>4gt
-  map  <D-5> 5gt
-  imap <D-5> <Esc>5gt
-  map  <D-6> 6gt
-  imap <D-6> <Esc>6gt
-  map  <D-7> 7gt
-  imap <D-7> <Esc>7gt
-  map  <D-8> 8gt
-  imap <D-8> <Esc>8gt
-  map  <D-9> 9gt
-  imap <D-9> <Esc>9gt
-else
-  " Map command-[ and command-] to indenting or outdenting
-  " while keeping the original selection in visual mode
-  vmap <A-]> >gv
-  vmap <A-[> <gv
+" Baselibメソッドのハイライト
+let php_baselib = 1
 
-  nmap <A-]> >>
-  nmap <A-[> <<
+" HTMLもハイライト
+let php_htmlInStrings = 1
 
-  omap <A-]> >>
-  omap <A-[> <<
+" <? を無効にする→ハイライト除外にする
+let php_noShortTags = 1
 
-  imap <A-]> <Esc>>>i
-  imap <A-[> <Esc><<i
+" ] や ) の対応エラーをハイライト
+let php_parent_error_close = 1
+let php_parent_error_open = 1
 
-  " Bubble single lines
-  nmap <C-Up> [e
-  nmap <C-Down> ]e
-  nmap <C-k> [e
-  nmap <C-j> ]e
-
-  " Bubble multiple lines
-  vmap <C-Up> [egv
-  vmap <C-Down> ]egv
-  vmap <C-k> [egv
-  vmap <C-j> ]egv
-
-  " Make shift-insert work like in Xterm
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
-
-  " Map Control-# to switch tabs
-  map  <C-0> 0gt
-  imap <C-0> <Esc>0gt
-  map  <C-1> 1gt
-  imap <C-1> <Esc>1gt
-  map  <C-2> 2gt
-  imap <C-2> <Esc>2gt
-  map  <C-3> 3gt
-  imap <C-3> <Esc>3gt
-  map  <C-4> 4gt
-  imap <C-4> <Esc>4gt
-  map  <C-5> 5gt
-  imap <C-5> <Esc>5gt
-  map  <C-6> 6gt
-  imap <C-6> <Esc>6gt
-  map  <C-7> 7gt
-  imap <C-7> <Esc>7gt
-  map  <C-8> 8gt
-  imap <C-8> <Esc>8gt
-  map  <C-9> 9gt
-  imap <C-9> <Esc>9gt
-endif
-
-" function to set for CakePHP {{{
-function! CakePHP()
-  let g:syntastic_php_phpcs_args = '--report=csv --standard=CakePHP'
-  set noexpandtab
+"SQLのPHP文字リテラルへの整形(:Sqltop, :Sqlfromp)
+function! SQLToPHP()
+  %s/^\(.\+\)$/"\1 " \./g
+  normal G$
+  execute "normal ?.<CR>"
+  normal xxggVG
+  echo "Convert to PHP String is finished."
 endfunction
-command! CakePHP :call CakePHP()
-function! CakePHPRemove()
-  let g:syntastic_php_phpcs_args = '--report=csv'
-  set expandtab                   " Tabs are spaces, not tabs
+command! Sqltop :call SQLToPHP()
+
+function! SQLFromPHP()
+  %s/^"\(.\+\) " *\.*$/\1/g
+  normal ggVG
+  echo "Convert from PHP String is finished."
 endfunction
-command! CakePHPRemove :call CakePHPRemove()
+command! Sqlfromp :call SQLFromPHP()
+
+" Function to locate endpoints of a PHP block {{{
+function! PhpBlockSelect(mode)
+    let motion = "v"
+    let line = getline(".")
+    let pos = col(".")-1
+    let end = col("$")-1
+
+    if a:mode == 1
+        if line[pos] == '?' && pos+1 < end && line[pos+1] == '>'
+            let motion .= "l"
+        elseif line[pos] == '>' && pos > 1 && line[pos-1] == '?'
+            " do nothing
+        else
+            let motion .= "/?>/e\<CR>"
+        endif
+        let motion .= "o"
+        if end > 0
+            let motion .= "l"
+        endif
+        let motion .= "?<\\?php\\>\<CR>"
+    else
+        if line[pos] == '?' && pos+1 < end && line[pos+1] == '>'
+            " do nothing
+        elseif line[pos] == '>' && pos > 1 && line[pos-1] == '?'
+            let motion .= "h?\\S\<CR>""
+        else
+            let motion .= "/?>/;?\\S\<CR>"
+        endif
+        let motion .= "o?<\\?php\\>\<CR>4l/\\S\<CR>"
+    endif
+
+    return motion
+endfunction
 " }}}
-call CakePHP()
+" Mappings to select full/inner PHP block
+nmap <silent> <expr> vaP PhpBlockSelect(1)
+nmap <silent> <expr> viP PhpBlockSelect(0)
+" Mappings for operator mode to work on full/inner PHP block
+omap <silent> aP :silent normal vaP<CR>
+omap <silent> iP :silent normal viP<CR>
 
